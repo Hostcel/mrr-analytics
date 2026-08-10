@@ -1,0 +1,3 @@
+# saida do ionCube entra pelo pacote cripto/, nao pelo git local
+*.bak-*
+log_whatsapp.txt
