@@ -1,7 +1,7 @@
 # MRR Analytics — módulo WHMCS
 
 Mostra **quanto dinheiro entrou** no seu WHMCS a cada mês, de onde veio e se está
-subindo ou caindo. Uso gratuito.
+subindo ou caindo. **Código-fonte aberto, uso gratuito — venda proibida.**
 
 **Versão:** 2.3.0 · **Autor:** [Hostcel](https://www.hostcel.com.br)
 
@@ -55,7 +55,7 @@ O módulo separa essas coisas em vez de misturar num número só.
 
 3. Em **Configure**, defina quem pode acessar.
 
-Requisitos: WHMCS 8+ e PHP 8.1+ com a extensão zlib (presente em qualquer hospedagem).
+Requisitos: WHMCS 8+ e PHP 8.1+.
 
 ---
 
@@ -95,7 +95,10 @@ para os números que você cadastrar.
 
 ## Licença
 
-Uso gratuito, código fechado. Veja [LICENSE](LICENSE).
+Código-fonte aberto para ler, auditar e modificar. **Uso gratuito; a venda é
+proibida** — inclusive de versões modificadas. Veja [LICENSE](LICENSE).
+
+Não é uma licença "open source" no sentido da OSI, porque restringe uso comercial.
 
 A biblioteca de gráficos (`assets/chart.umd.min.js`) é o
 [Chart.js](https://www.chartjs.org/), de terceiros, sob licença MIT, mantida sem

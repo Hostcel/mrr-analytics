@@ -2,47 +2,64 @@ LICENÇA DE USO — MRR ANALYTICS (módulo WHMCS)
 
 Copyright (c) 2026 Hostcel — https://www.hostcel.com.br
 
-Este software é distribuído GRATUITAMENTE, em formato protegido, nos termos
-abaixo. Ao instalar ou usar o módulo, você concorda com eles.
+Código-fonte ABERTO para leitura, auditoria e uso. **A VENDA É PROIBIDA.**
+
+Aviso: esta não é uma licença "open source" no sentido da Open Source Initiative,
+porque restringe uso comercial. É uma licença de fonte aberta e uso gratuito.
+
+Ao instalar, usar ou copiar o módulo, você concorda com os termos abaixo.
 
 
 1. O QUE VOCÊ PODE FAZER
 
    a) Instalar e usar o módulo, sem custo, em quantas instalações do WHMCS a sua
       empresa ou o seu grupo econômico operar.
-   b) Fazer cópias de segurança do pacote para uso próprio.
-   c) Usar os relatórios e os números gerados pelo módulo livremente, inclusive
-      em apresentações e documentos da sua empresa.
+   b) Ler, estudar e auditar todo o código — ele é distribuído aberto justamente
+      para isso.
+   c) Modificar o código para o seu próprio uso, inclusive adaptar cálculos e
+      telas à sua operação.
+   d) Redistribuir o módulo, original ou modificado, desde que:
+      - seja SEMPRE gratuito, sem cobrança de qualquer natureza;
+      - esta licença acompanhe a cópia, sem alteração;
+      - a autoria original da Hostcel seja mantida e visível;
+      - as suas modificações fiquem identificadas como suas.
+   e) Enviar correções e melhorias pelo repositório oficial.
 
 
 2. O QUE VOCÊ NÃO PODE FAZER
 
-   a) Revender, sublicenciar, alugar ou cobrar de terceiros pelo módulo.
-   b) Redistribuir o pacote, no todo ou em parte, por qualquer meio — inclusive
-      republicando em outro repositório, site de downloads ou marketplace.
-      Indique o repositório oficial em vez de hospedar uma cópia.
-   c) Remover, alterar ou ocultar avisos de autoria, marca ou origem.
-   d) Desofuscar, fazer engenharia reversa ou tentar contornar a proteção do
-      código dos arquivos protegidos.
+   a) VENDER o módulo, no todo ou em parte, original ou modificado. Isso inclui
+      cobrar por download, por licença, por ativação, por "versão premium", por
+      instalação, por suporte obrigatório para usá-lo, ou embuti-lo como item
+      cobrado em um pacote.
+   b) Sublicenciar, alugar ou transferir direitos sobre o módulo a terceiros
+      mediante pagamento.
+   c) Condicionar o acesso ao módulo a qualquer contrapartida financeira.
+   d) Remover, alterar ou ocultar avisos de autoria, marca ou origem.
    e) Apresentar o módulo, modificado ou não, como sendo de sua autoria.
+
+   Cobrar pelo SEU trabalho de consultoria, instalação ou customização para um
+   cliente específico é permitido. O que não pode é cobrar pelo módulo em si,
+   nem torná-lo condição de uma venda.
 
 
 3. O QUE O MÓDULO FAZ NO SEU WHMCS
 
-   O módulo apenas LÊ o seu banco de dados para calcular o dinheiro recebido e a
-   receita recorrente: pagamentos, serviços, produtos e domínios. Ele não altera
-   faturas, preços, produtos, clientes nem templates, e não acessa senha nem dado
-   de cartão.
+   Apenas LÊ o seu banco de dados para calcular o dinheiro recebido e a receita
+   recorrente: pagamentos, serviços, produtos e domínios. Não altera faturas,
+   preços, produtos, clientes nem templates, e não acessa senha nem dado de
+   cartão.
 
-   Escreve somente nas próprias tabelas (mod_mrr_history e mod_mrr_logs), que
+   Escreve somente nas próprias tabelas, mod_mrr_history e mod_mrr_logs, que
    guardam o retrato mensal e o registro dos relatórios enviados.
 
-   O envio opcional de relatório por WhatsApp usa a API que VOCÊ configurar na
-   tela do módulo, e envia apenas para os números que você cadastrar. Nenhum dado
-   é enviado à Hostcel.
+   O envio opcional de relatório por WhatsApp usa a API que VOCÊ configurar, e
+   envia apenas para os números que você cadastrar. Nenhum dado é enviado à
+   Hostcel.
 
    A biblioteca de gráficos (assets/chart.umd.min.js) é o Chart.js, de terceiros,
-   distribuído sob licença MIT e mantido sem alteração.
+   distribuída sob licença MIT e mantida sem alteração. A licença MIT dela
+   continua valendo para ela.
 
 
 4. SEM GARANTIA
@@ -55,17 +72,18 @@ abaixo. Ao instalar ou usar o módulo, você concorda com eles.
    perda de dados ou lucros cessantes. Mantenha backup do seu WHMCS.
 
 
-5. CONTRIBUIÇÕES
-
-   Relatos de erro e sugestões são bem-vindos pelas issues do repositório
-   oficial. Ao enviar informações, você autoriza o uso delas para corrigir e
-   documentar o módulo.
-
-
-6. VIGÊNCIA
+5. VIGÊNCIA
 
    Esta licença vale enquanto você cumprir os termos acima. Descumprido qualquer
-   item da seção 2, o direito de uso cessa imediatamente.
+   item da seção 2, o direito de uso cessa imediatamente, sem prejuízo das
+   medidas cabíveis.
+
+
+6. LEI APLICÁVEL
+
+   Esta licença é regida pelas leis da República Federativa do Brasil, em
+   especial a Lei 9.610/1998 (direitos autorais) e a Lei 9.609/1998 (programa de
+   computador), que protegem esta obra independentemente de registro.
 
 
 Dúvidas sobre a licença: https://www.hostcel.com.br

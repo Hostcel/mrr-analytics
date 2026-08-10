@@ -1,8 +1,701 @@
 <?php
 /**
- * MRR Analytics — modulo WHMCS da Hostcel.
- * Codigo protegido. Uso gratuito nos termos do LICENSE.
- * https://github.com/Hostcel/mrr-analytics
+ * MRR Analytics — interface administrativa.
+ *
+ * Estrutura: 4 indicadores, 2 graficos e a tabela de produtos — a mesma que o
+ * dono aprovou. O visual segue o padrao do modulo hostcelapp: Bootstrap do
+ * proprio WHMCS (panel / table / nav-tabs / label) com uma camada fina de CSS
+ * escopada em `.mrr`, so para os acentos. Nada de layout proprio.
+ *
+ * Chart.js vem de assets/ do proprio modulo — sem CDN.
+ *
+ * @version 2.3.0
+ * @author  Hostcel
  */
-if(!function_exists('gzinflate')){die('Extensao zlib necessaria.');}
-eval(gzinflate(base64_decode('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')));
+
+if (!defined('WHMCS')) {
+    die('Acesso não autorizado.');
+}
+
+use WHMCS\Database\Capsule;
+
+require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../calc.php';
+
+function mrr_admin_dispatcher($vars)
+{
+    $action = isset($_GET['action']) ? $_GET['action'] : 'dashboard';
+
+    switch ($action) {
+        case 'history':
+            mrr_render_history($vars);
+            break;
+        case 'test_whatsapp':
+            mrr_render_test_whatsapp($vars);
+            break;
+        case 'update':
+            mrr_render_update($vars);
+            break;
+        case 'market':
+            mrr_render_market($vars);
+            break;
+        default:
+            mrr_render_dashboard($vars);
+    }
+}
+
+/** Monta uma URL da propria area admin trocando apenas a action. */
+function mrr_admin_url($action)
+{
+    $params = $_GET;
+    $params['action'] = $action;
+
+    return 'addonmodules.php?' . http_build_query($params);
+}
+
+/** Chart.js local + a camada fina de CSS (padrao hostcelapp). */
+function mrr_admin_assets()
+{
+    // Font Awesome ja vem com o WHMCS; Chart.js e servido pelo proprio modulo.
+    echo '<script src="modules/addons/mrr/assets/chart.umd.min.js"></script>';
+    ?>
+    <style>
+    /* — cabecalho, no padrao do hostcelapp — */
+    .mrr{padding:0 5px}
+    .mrr .mrr-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:15px;padding:15px;background:linear-gradient(90deg,#2c7be5 0%,#1a68d1 100%);color:#fff;border-radius:6px}
+    .mrr .mrr-header h2{margin:0;color:#fff;font-weight:600;font-size:22px}
+    .mrr .mrr-header small{opacity:.85}
+    .mrr .mrr-header .badge-version{background:rgba(255,255,255,.2);padding:5px 12px;border-radius:20px;font-size:12px;white-space:nowrap}
+
+    /* — abas: so o acento azul embaixo; as cores ficam com o tema — */
+    .mrr .mrr-tabs{border-bottom:2px solid #2c7be5;margin-bottom:20px}
+    .mrr .mrr-tabs > li > a{font-weight:500}
+    .mrr .mrr-tabs > li.active > a{border-bottom-color:transparent}
+
+    /* — indicadores: panel do Bootstrap com acento na borda — */
+    .mrr .mrr-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:20px}
+    .mrr .mrr-stat{border-left:4px solid #3d8bd6;margin-bottom:0;overflow:hidden}
+    .mrr .mrr-stat.up{border-left-color:#28a745}
+    .mrr .mrr-stat.down{border-left-color:#d9534f}
+    .mrr .mrr-stat.arr{border-left-color:#6f42c1}
+    .mrr .mrr-stat .k{font-size:11px;text-transform:uppercase;letter-spacing:.5px;opacity:.7}
+    .mrr .mrr-stat .v{font-size:20px;font-weight:600;line-height:1.4}
+    .mrr .mrr-stat .s{font-size:11px;opacity:.7}
+
+    /* — cards e tabelas — */
+    .mrr .mrr-card{overflow:hidden}
+
+    /* O campo de telefone usa o seletor de paises do proprio WHMCS
+       (assets/js/TelephoneCountryCodeDropdown.js). A lista e posicionada
+       absoluta e era cortada pelo overflow do card; este bloco libera o
+       recorte e poe a lista acima do resto. */
+    .mrr .mrr-card.mrr-overflow{overflow:visible}
+    .mrr .mrr-card.mrr-overflow > .panel-body{overflow:visible}
+    .mrr .iti{width:100%}
+    .mrr .iti__country-list,
+    .mrr .country-list{z-index:1200}
+    .mrr .iti--container{z-index:1200}
+    .mrr .mrr-card > .panel-heading{font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .mrr .mrr-table th{font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+    .mrr .mrr-chart{position:relative;height:240px}
+    .mrr .mrr-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:15px}
+
+    /* — vitrine de modulos: mesma grade e mesmo card do hostcelapp — */
+    .mrr .mrr-market-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+    .mrr .mrr-market-card{overflow:hidden;margin-bottom:0;display:flex;flex-direction:column;max-width:400px}
+    .mrr .mrr-market-card > .panel-body{padding:15px;flex:1}
+    .mrr .mrr-market-card img{width:100%;height:auto;display:block}
+    .mrr .mrr-tight{margin-top:0}
+    .mrr .mrr-swatch{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:middle}
+    </style>
+    <?php
+}
+
+/** Cabecalho + abas, repetidos nas tres telas. */
+function mrr_admin_header($titulo, $subtitulo, $active)
+{
+    mrr_admin_assets();
+    echo '<div class="mrr">';
+    echo '<div class="mrr-header"><div><h2>' . $titulo . '</h2><small>' . $subtitulo . '</small></div>';
+    echo '<span class="badge-version">v' . MRR_VERSION . '</span></div>';
+
+    $latest = mrr_latest();
+    $nova   = $latest && version_compare((string) $latest['version'], MRR_VERSION, '>');
+
+    $tabs = [
+        'dashboard'     => '<i class="fas fa-chart-line"></i> Dashboard',
+        'history'       => '<i class="fas fa-history"></i> Histórico (12 meses)',
+        'test_whatsapp' => '<i class="fab fa-whatsapp"></i> Testar WhatsApp',
+        // Mesma ordem do hostcelapp: Modulos gratis antes de Atualizacoes.
+        'market'        => '<i class="fas fa-gift"></i> Módulos grátis',
+        'update'        => '<i class="fas fa-cloud-download-alt"></i> Atualizações'
+                           . ($nova ? ' <span class="label label-success">nova</span>' : ''),
+    ];
+    echo '<ul class="nav nav-tabs mrr-tabs">';
+    foreach ($tabs as $a => $label) {
+        echo '<li' . ($active === $a ? ' class="active"' : '') . '>'
+            . '<a href="' . htmlspecialchars(mrr_admin_url($a)) . '">' . $label . '</a></li>';
+    }
+    echo '</ul>';
+}
+
+/**
+ * Serializa uma lista de numeros para o JS com 2 casas.
+ *
+ * `json_encode` de float no PHP sai com a expansao binaria inteira
+ * (18900.72999999999956344254...), o que incha o HTML sem necessidade.
+ */
+function mrr_json_nums(array $valores)
+{
+    return '[' . implode(',', array_map(function ($v) {
+        return number_format((float) $v, 2, '.', '');
+    }, $valores)) . ']';
+}
+
+/** Indicador no padrao panel + acento. */
+function mrr_stat($rotulo, $valor, $sub, $classe = '')
+{
+    echo '<div class="panel panel-default mrr-stat ' . $classe . '"><div class="panel-body">';
+    echo '<div class="k">' . $rotulo . '</div>';
+    echo '<div class="v">' . $valor . '</div>';
+    echo '<div class="s">' . $sub . '</div>';
+    echo '</div></div>';
+}
+
+/**
+ * Calcula MRR de um periodo.
+ *
+ * Delega para o motor unico (calc.php). A versao antiga desta funcao
+ * perguntava "quem esta Active AGORA" e usava a resposta para qualquer mes
+ * passado — por isso M-1 e M-2 davam o mesmo valor e o grafico ficava reto.
+ */
+function mrr_calculate_for_period($startDate, $endDate)
+{
+    $snap = mrr_snapshot($startDate);
+
+    return [
+        'totalMRR'     => $snap['mrr_total'],
+        'servicesMRR'  => $snap['by_product'],   // por produto: nenhum some
+        'domainsMRR'   => $snap['mrr_domains'],
+        'expansionMRR' => $snap['mrr_new'],
+        'churnMRR'     => $snap['mrr_churn'],
+        'count'        => $snap['count_total'],
+        'countNew'     => $snap['count_new'],
+        'countChurn'   => $snap['count_churn'],
+    ];
+}
+
+function mrr_meses_pt()
+{
+    return [
+        '01' => 'Janeiro', '02' => 'Fevereiro', '03' => 'Março', '04' => 'Abril',
+        '05' => 'Maio', '06' => 'Junho', '07' => 'Julho', '08' => 'Agosto',
+        '09' => 'Setembro', '10' => 'Outubro', '11' => 'Novembro', '12' => 'Dezembro',
+    ];
+}
+
+function mrr_render_dashboard($vars)
+{
+    $m1Start = mrr_month_start(1);
+    $m2Start = mrr_month_start(2);
+
+    $mrrM1 = mrr_calculate_for_period($m1Start, '');
+    $mrrM2 = mrr_calculate_for_period($m2Start, '');
+
+    $t1 = $mrrM1['totalMRR'];
+    $t2 = $mrrM2['totalMRR'];
+
+    $varAbs = $t1 - $t2;
+    $varPct = $t2 > 0 ? ($varAbs / $t2) * 100 : 0;
+    $subiu  = $varPct >= 0;
+
+    $meses  = mrr_meses_pt();
+    $m1Name = $meses[date('m', strtotime($m1Start))] . '/' . date('Y', strtotime($m1Start));
+    $m2Name = $meses[date('m', strtotime($m2Start))] . '/' . date('Y', strtotime($m2Start));
+
+    // DINHEIRO RECEBIDO — o numero que o dono cobra em primeiro lugar.
+    $recM1 = mrr_received($m1Start);
+    $recM2 = mrr_received($m2Start);
+    $recVar = $recM1['total'] - $recM2['total'];
+    $recPct = $recM2['total'] > 0 ? ($recVar / $recM2['total']) * 100 : 0;
+    $recSubiu = $recVar >= 0;
+
+    mrr_admin_header(
+        '<i class="fas fa-chart-line"></i> MRR Analytics',
+        'Dinheiro recebido e receita recorrente, mês a mês',
+        'dashboard'
+    );
+
+    // Mesmas 4 posicoes de sempre. O que mudou foi a FONTE do numero: agora e
+    // dinheiro que entrou (tblaccounts, por data do pagamento), nao valor de
+    // fatura nem projecao de contrato.
+    echo '<div class="mrr-stats">';
+    mrr_stat($m2Name . ' (M-2)', mrr_money($recM2['total']), $recM2['count'] . ' pagamentos recebidos');
+    mrr_stat($m1Name . ' (M-1)', mrr_money($recM1['total']), $recM1['count'] . ' pagamentos recebidos');
+    mrr_stat(
+        '<i class="fas fa-arrow-' . ($recSubiu ? 'up' : 'down') . '"></i> '
+        . ($recSubiu ? 'Crescimento' : 'Queda'),
+        number_format(abs($recPct), 2, ',', '.') . '%',
+        mrr_money(abs($recVar)) . ' vs M-2',
+        $recSubiu ? 'up' : 'down'
+    );
+    // Entrou x saiu: e a resposta para "por que subiu ou caiu". Antes este card
+    // era o ARR, que e so o MRR vezes 12 e nao acrescentava informacao.
+    $entrou = $mrrM1['expansionMRR'];
+    $saiu   = $mrrM1['churnMRR'];
+    $liquido = $entrou - $saiu;
+
+    mrr_stat(
+        'Entrou &times; saiu em ' . $m1Name,
+        '<span class="text-success">+' . mrr_money($entrou) . '</span>'
+        . ' <span class="text-muted" style="font-weight:400;">/</span> '
+        . '<span class="text-danger">&minus;' . mrr_money($saiu) . '</span>',
+        $mrrM1['countNew'] . ' novos &middot; ' . $mrrM1['countChurn'] . ' cancelados'
+        . ' &middot; saldo ' . ($liquido >= 0 ? '+' : '&minus;') . mrr_money(abs($liquido)),
+        $liquido >= 0 ? 'up' : 'down'
+    );
+    echo '</div>';
+
+    // Paleta suave, sem depender do tema.
+    $cores = ['#2c7be5', '#00b8d9', '#28a745', '#f0ad4e', '#6f42c1',
+              '#d9534f', '#20c997', '#fd7e14', '#6c757d', '#e83e8c'];
+
+    // Por produto = DINHEIRO recebido, nao MRR de contrato. Um produto pode ter
+    // contrato ativo e nao ter recebido nada no mes (foi o caso do Cameras
+    // Cloud em julho: R$ 598 de contrato, R$ 0 recebido).
+    $recProdM1 = mrr_received_by_product($m1Start);
+    $recProdM2 = mrr_received_by_product($m2Start);
+
+    $top    = array_slice($recProdM1, 0, 10, true);
+    $labels = [];
+    $dados  = [];
+    $cor    = [];
+    $i      = 0;
+    foreach ($top as $nome => $v) {
+        $labels[] = $nome;
+        $dados[]  = round($v, 2);
+        $cor[]    = $cores[$i++ % count($cores)];
+    }
+
+    // Evolucao dos ultimos 6 meses fechados: dinheiro recebido em barras
+    // (o que importa) e o MRR como linha de referencia.
+    $hLabels = [];
+    $hDados  = [];
+    $hRecebido = [];
+    for ($k = 6; $k >= 1; $k--) {
+        $ini       = mrr_month_start($k);
+        $hLabels[] = substr($meses[date('m', strtotime($ini))], 0, 3) . '/' . date('y', strtotime($ini));
+        $hDados[]  = round(mrr_snapshot($ini)['mrr_total'], 2);
+        $hRecebido[] = round(mrr_received($ini)['total'], 2);
+    }
+
+    echo '<div class="mrr-row">';
+    echo '<div class="panel panel-default mrr-card">';
+    echo '<div class="panel-heading"><span><i class="fas fa-chart-pie"></i> Dinheiro recebido por produto</span></div>';
+    echo '<div class="panel-body"><div class="mrr-chart"><canvas id="mrrCategoryChart"></canvas></div></div></div>';
+    echo '<div class="panel panel-default mrr-card">';
+    echo '<div class="panel-heading"><span><i class="fas fa-chart-line"></i> Recebido &times; MRR (6 meses)</span></div>';
+    echo '<div class="panel-body"><div class="mrr-chart"><canvas id="mrrHistoryChart"></canvas></div></div></div>';
+    echo '</div>';
+
+    echo '<div class="panel panel-default mrr-card">';
+    echo '<div class="panel-heading"><span><i class="fas fa-list"></i> Dinheiro recebido por produto em '
+        . $m1Name . '</span></div>';
+    echo '<div class="table-responsive"><table class="table table-striped table-condensed mrr-table">';
+    echo '<thead><tr><th>Produto</th><th class="text-right">Recebido</th><th class="text-right">%</th>'
+        . '<th class="text-right">Variação M-2 → M-1</th></tr></thead><tbody>';
+
+    $totalRec = $recM1['total'] ?: 1;
+    $i = 0;
+    foreach ($top as $nome => $v) {
+        $pct    = round(($v / $totalRec) * 100, 1);
+        $antes  = $recProdM2[$nome] ?? 0;
+        $delta  = $antes > 0 ? (($v - $antes) / $antes) * 100 : ($v > 0 ? 100 : 0);
+        $classe = $delta < 0 ? 'danger' : 'success';
+        $seta   = $delta < 0 ? '&#9660;' : '&#9650;';
+
+        echo '<tr>';
+        echo '<td><span class="mrr-swatch" style="background-color:' . $cores[$i++ % count($cores)] . ';"></span>'
+            . htmlspecialchars($nome) . '</td>';
+        echo '<td class="text-right"><strong>' . mrr_money($v) . '</strong></td>';
+        echo '<td class="text-right">' . $pct . '%</td>';
+        echo '<td class="text-right"><span class="text-' . $classe . '">' . $seta . ' '
+            . number_format(abs($delta), 1, ',', '.') . '%</span></td>';
+        echo '</tr>';
+    }
+    echo '</tbody></table></div></div>';
+    echo '</div>'; // .mrr
+
+    ?>
+    <script>
+    (function () {
+        if (typeof Chart === 'undefined') { return; }
+        var pie = document.getElementById('mrrCategoryChart');
+        if (pie) {
+            new Chart(pie, {
+                type: 'doughnut',
+                data: {
+                    labels: <?php echo json_encode(array_values($labels)); ?>,
+                    datasets: [{ data: <?php echo mrr_json_nums($dados); ?>,
+                                 backgroundColor: <?php echo json_encode($cor); ?>, borderWidth: 0 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, cutout: '55%',
+                           plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } } } }
+            });
+        }
+        var line = document.getElementById('mrrHistoryChart');
+        if (line) {
+            new Chart(line, {
+                // O 'type' aqui e obrigatorio mesmo em grafico misto: sem ele o
+                // Chart.js nao registra o controlador e o grafico nao aparece.
+                type: 'bar',
+                data: {
+                    labels: <?php echo json_encode($hLabels); ?>,
+                    datasets: [
+                        { type: 'bar', label: 'Recebido', data: <?php echo mrr_json_nums($hRecebido); ?>,
+                          backgroundColor: '#00a854', borderRadius: 3, order: 2 },
+                        { type: 'line', label: 'MRR', data: <?php echo mrr_json_nums($hDados); ?>,
+                          borderColor: '#2c7be5', backgroundColor: 'rgba(44,123,229,.12)',
+                          fill: false, tension: .3, borderWidth: 2, order: 1 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+                    scales: { y: { ticks: { callback: function (v) { return 'R$ ' + v.toLocaleString('pt-BR'); } } } }
+                }
+            });
+        }
+    })();
+    </script>
+    <?php
+}
+
+/**
+ * Historico: os ultimos 12 meses de MRR.
+ *
+ * Antes esta aba listava os envios de WhatsApp, que nada tinham a ver com
+ * "historico" de receita — o log de envios foi para a aba de teste.
+ */
+function mrr_render_history($vars)
+{
+    mrr_admin_header(
+        '<i class="fas fa-history"></i> Histórico de MRR',
+        'Últimos 12 meses fechados — somente contratos ativos',
+        'history'
+    );
+
+    $meses  = mrr_meses_pt();
+    $linhas = [];
+    for ($k = 12; $k >= 1; $k--) {
+        $ini  = mrr_month_start($k);
+        $snap = mrr_snapshot($ini);
+        $linhas[] = [
+            'rotulo' => $meses[date('m', strtotime($ini))] . '/' . date('Y', strtotime($ini)),
+            'curto'  => substr($meses[date('m', strtotime($ini))], 0, 3) . '/' . date('y', strtotime($ini)),
+            'snap'   => $snap,
+            'rec'    => mrr_received($ini),
+        ];
+    }
+
+    echo '<div class="panel panel-default mrr-card">';
+    echo '<div class="panel-heading"><span><i class="fas fa-chart-area"></i> Evolução (12 meses)</span></div>';
+    echo '<div class="panel-body"><div class="mrr-chart"><canvas id="mrrHist12"></canvas></div></div></div>';
+
+    echo '<div class="panel panel-default mrr-card">';
+    echo '<div class="panel-heading"><span><i class="fas fa-table"></i> Mês a mês</span></div>';
+    echo '<div class="table-responsive"><table class="table table-striped table-condensed mrr-table">';
+    echo '<thead><tr><th>Mês</th><th class="text-right">Recebido</th><th class="text-right">Pgtos</th>'
+        . '<th class="text-right">MRR</th><th class="text-right">Variação</th>'
+        . '<th class="text-right">Contratos</th><th class="text-right">Novo MRR</th>'
+        . '<th class="text-right">Cancelado</th></tr></thead><tbody>';
+
+    // O grafico fica em ordem cronologica; a tabela mostra o mes mais recente
+    // primeiro, que e como se lê no dia a dia.
+    $labels = [];
+    $dados  = [];
+    $recebido = [];
+    foreach ($linhas as $l) {
+        $labels[]   = $l['curto'];
+        $dados[]    = round($l['snap']['mrr_total'], 2);
+        $recebido[] = round($l['rec']['total'], 2);
+    }
+
+    $recentes = array_reverse($linhas);
+    foreach ($recentes as $i => $l) {
+        $s = $l['snap'];
+        // Como a lista esta invertida, o mes anterior e o PROXIMO item.
+        $velho = isset($recentes[$i + 1]) ? $recentes[$i + 1]['snap']['mrr_total'] : null;
+        $var   = $velho === null ? null : $s['mrr_total'] - $velho;
+
+        echo '<tr>';
+        echo '<td>' . $l['rotulo'] . '</td>';
+        echo '<td class="text-right"><strong style="color:#00a854;">'
+            . mrr_money($l['rec']['total']) . '</strong></td>';
+        echo '<td class="text-right text-muted">' . $l['rec']['count'] . '</td>';
+        echo '<td class="text-right">' . mrr_money($s['mrr_total']) . '</td>';
+        echo '<td class="text-right">' . ($var === null
+            ? '<span class="text-muted">&mdash;</span>'
+            : '<span class="text-' . ($var >= 0 ? 'success' : 'danger') . '">'
+              . ($var >= 0 ? '&#9650; ' : '&#9660; ') . mrr_money(abs($var)) . '</span>') . '</td>';
+        echo '<td class="text-right">' . $s['count_total'] . '</td>';
+        echo '<td class="text-right">' . mrr_money($s['mrr_new']) . '</td>';
+        echo '<td class="text-right">' . ($s['mrr_churn'] > 0
+            ? '<span class="text-danger">' . mrr_money($s['mrr_churn']) . '</span>'
+            : '<span class="text-muted">' . mrr_money(0) . '</span>') . '</td>';
+        echo '</tr>';
+    }
+    echo '</tbody></table></div></div>';
+    echo '</div>'; // .mrr
+
+    ?>
+    <script>
+    (function () {
+        if (typeof Chart === 'undefined') { return; }
+        var el = document.getElementById('mrrHist12');
+        if (!el) { return; }
+        new Chart(el, {
+            // 'type' obrigatorio tambem aqui, pelo mesmo motivo.
+            type: 'bar',
+            data: {
+                labels: <?php echo json_encode($labels); ?>,
+                datasets: [
+                    { type: 'bar', label: 'Recebido', data: <?php echo mrr_json_nums($recebido); ?>,
+                      backgroundColor: '#00a854', borderRadius: 3, order: 2 },
+                    { type: 'line', label: 'MRR', data: <?php echo mrr_json_nums($dados); ?>,
+                      borderColor: '#2c7be5', fill: false, tension: .3, borderWidth: 2, order: 1 }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+                scales: { y: { ticks: { callback: function (v) { return 'R$ ' + v.toLocaleString('pt-BR'); } } } }
+            }
+        });
+    })();
+    </script>
+    <?php
+}
+
+/** Envio de teste + configuracao efetiva + log dos envios do cron. */
+function mrr_render_test_whatsapp($vars)
+{
+    $aviso = '';
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['test_send'])) {
+        $fone = trim((string) ($_POST['test_phone'] ?? ''));
+
+        $e164 = mrr_phone_e164($fone);
+
+        if ($e164 === '') {
+            $aviso = '<div class="alert alert-warning">Número inválido. Use DDD + número, por exemplo '
+                . '<kbd>5581999999999</kbd>.</div>';
+        } else {
+            // Seguro: api.php so executa o fluxo do cron via linha de comando.
+            require_once __DIR__ . '/../api.php';
+
+            $config = [
+                'whatsapp_url'          => mrr_setting('whatsapp_url'),
+                'whatsapp_instance_id'  => mrr_setting('whatsapp_instance_id'),
+                'whatsapp_access_token' => mrr_setting('whatsapp_access_token'),
+            ];
+
+            $texto = "*Teste — MRR Analytics*\n\nSe você recebeu esta mensagem, a integração está funcionando.";
+            $ok    = mrr_send_whatsapp($e164, $texto, $config);
+
+            $aviso = $ok
+                ? '<div class="alert alert-success">Mensagem enviada para <kbd>' . htmlspecialchars($e164)
+                  . '</kbd>. Se não chegar em 1 minuto, confira a instância no painel do Zapcel.</div>'
+                : '<div class="alert alert-danger">A API recusou o envio. Confira as credenciais abaixo.</div>';
+        }
+    }
+
+    mrr_admin_header(
+        '<i class="fab fa-whatsapp"></i> Testar WhatsApp',
+        'Confirme a integração antes de confiar no relatório automático',
+        'test_whatsapp'
+    );
+
+    echo $aviso;
+
+    $url  = mrr_setting('whatsapp_url');
+    $id   = mrr_setting('whatsapp_instance_id');
+    $tok  = mrr_setting('whatsapp_access_token');
+    $liga = mrr_setting_on('whatsapp_enabled');
+
+    echo '<div class="mrr-row">';
+
+    echo '<div class="panel panel-default mrr-card mrr-overflow">';
+    echo '<div class="panel-heading"><span><i class="fas fa-paper-plane"></i> Envio de teste</span></div>';
+    echo '<div class="panel-body"><form method="post">';
+    echo '<div class="form-group"><label>Número de Teste</label>';
+    echo '<input type="text" name="test_phone" class="form-control input-sm" placeholder="5581999999999" value="">';
+    echo '<p class="help-block" style="font-size:11px;">Digite o número com código do país e DDD '
+        . '(ex: 5581999999999)</p></div>';
+    echo '<button type="submit" name="test_send" value="1" class="btn btn-primary">Enviar teste</button>';
+    echo '</form></div></div>';
+
+    echo '<div class="panel panel-default mrr-card">';
+    echo '<div class="panel-heading"><span><i class="fas fa-cog"></i> Configuração em uso</span></div>';
+    echo '<table class="table table-condensed mrr-table" style="margin:0;"><tbody>';
+    echo '<tr><td>Relatório automático</td><td class="text-right">'
+        . ($liga ? '<span class="label label-success">Ativo</span>' : '<span class="label label-default">Desligado</span>')
+        . '</td></tr>';
+    echo '<tr><td>Endpoint</td><td class="text-right">' . ($url ? '<kbd>' . htmlspecialchars($url) . '</kbd>'
+        : '<span class="label label-danger">não definido</span>') . '</td></tr>';
+    echo '<tr><td>Instance ID</td><td class="text-right">' . ($id ? htmlspecialchars($id)
+        : '<span class="label label-danger">não definido</span>') . '</td></tr>';
+    echo '<tr><td>Token</td><td class="text-right">' . ($tok ? '<span class="label label-success">definido</span>'
+        : '<span class="label label-danger">não definido</span>') . '</td></tr>';
+    echo '</tbody></table>';
+    echo '<div class="panel-footer text-muted" style="font-size:11px;">'
+        . 'Configuração exclusiva deste módulo, em Addons &rsaquo; MRR Analytics &rsaquo; Configurar.</div>';
+    echo '</div>';
+
+    echo '</div>'; // .mrr-row
+
+    $logs = [];
+    try {
+        if (Capsule::schema()->hasTable(MRR_TABLE_LOGS)) {
+            $logs = Capsule::table(MRR_TABLE_LOGS)->orderBy('id', 'desc')->limit(10)->get();
+        }
+    } catch (\Throwable $e) {
+        $logs = [];
+    }
+
+    echo '<div class="panel panel-default mrr-card">';
+    echo '<div class="panel-heading"><span><i class="fas fa-inbox"></i> Últimos envios automáticos</span></div>';
+    if (count($logs) === 0) {
+        echo '<div class="panel-body text-muted">Nenhum relatório enviado ainda.</div>';
+    } else {
+        echo '<div class="table-responsive"><table class="table table-striped table-condensed mrr-table">';
+        echo '<thead><tr><th>Quando</th><th>Tipo</th><th class="text-right">Enviados</th>'
+            . '<th class="text-right">Falhas</th></tr></thead><tbody>';
+        foreach ($logs as $l) {
+            echo '<tr><td>' . htmlspecialchars((string) $l->sent_at) . '</td>'
+                . '<td>' . htmlspecialchars((string) $l->report_type) . '</td>'
+                . '<td class="text-right">' . (int) $l->total_sent . '</td>'
+                . '<td class="text-right">' . ((int) $l->total_failed > 0
+                    ? '<span class="text-danger">' . (int) $l->total_failed . '</span>'
+                    : '0') . '</td></tr>';
+        }
+        echo '</tbody></table></div>';
+    }
+    echo '</div>';
+    echo '</div>'; // .mrr
+}
+
+/**
+ * Aba Atualizacoes — mesma logica do modulo hostcelapp: consulta o manifesto
+ * publicado pela Hostcel e compara com a versao instalada. Nunca escreve nada
+ * sozinho; quem atualiza e o dono do WHMCS.
+ */
+function mrr_render_update($vars)
+{
+    mrr_admin_header(
+        '<i class="fas fa-cloud-download-alt"></i> Atualizações',
+        'Versão instalada e a última publicada',
+        'update'
+    );
+
+    $latest = mrr_latest();
+    $nova   = $latest && version_compare((string) $latest['version'], MRR_VERSION, '>');
+
+    echo '<div class="panel panel-default mrr-card">';
+    echo '<div class="panel-heading"><span><i class="fas fa-code-branch"></i> Versão</span></div>';
+    echo '<div class="panel-body">';
+    echo '<table class="table table-condensed" style="margin:0 0 12px;"><tbody>';
+    echo '<tr><td>Instalada</td><td class="text-right"><kbd>v' . MRR_VERSION . '</kbd></td></tr>';
+    echo '<tr><td>Última publicada</td><td class="text-right">' . ($latest
+        ? '<kbd>v' . htmlspecialchars((string) $latest['version']) . '</kbd>'
+          . (!empty($latest['date']) ? ' <span class="text-muted">(' . htmlspecialchars((string) $latest['date']) . ')</span>' : '')
+        : '<span class="text-muted">sem resposta do servidor de versões</span>') . '</td></tr>';
+    echo '</tbody></table>';
+
+    if (!$latest) {
+        echo '<div class="alert alert-info">A verificação automática só funciona depois que o '
+            . 'manifesto deste módulo estiver publicado em <kbd>' . htmlspecialchars(MRR_UPDATE_MANIFEST)
+            . '</kbd>. Enquanto isso, acompanhe as versões pelo GitHub.</div>';
+    }
+
+    if ($nova) {
+        echo '<div class="alert alert-warning">Há uma versão nova: <b>v'
+            . htmlspecialchars((string) $latest['version']) . '</b>.</div>';
+        if (!empty($latest['changelog'])) {
+            echo '<p><b>Novidades:</b></p><ul>';
+            foreach ((array) $latest['changelog'] as $c) {
+                echo '<li>' . htmlspecialchars((string) $c) . '</li>';
+            }
+            echo '</ul>';
+        }
+        $dl = !empty($latest['url']) ? (string) $latest['url'] : MRR_DOWNLOAD_URL;
+        echo '<a href="' . htmlspecialchars($dl) . '" target="_blank" rel="noopener" class="btn btn-primary">'
+            . 'Baixar a v' . htmlspecialchars((string) $latest['version']) . '</a>';
+        echo '<p class="help-block">Extraia em <kbd>/modules/addons/mrr/</kbd> substituindo os arquivos '
+            . 'e recarregue esta página. Seu histórico é preservado.</p>';
+    } else {
+        echo '<div class="alert alert-success" style="margin-bottom:10px;">Você está na versão mais recente.</div>';
+        echo '<a href="' . MRR_DOWNLOAD_URL . '" target="_blank" rel="noopener" class="btn btn-default">'
+            . 'Ver no GitHub</a>';
+    }
+    echo '</div></div>';
+    echo '</div>'; // .mrr
+}
+
+/**
+ * Aba Modulos gratis — vitrine dos outros modulos que a Hostcel publica.
+ * Se nao houver rede ou o manifesto estiver fora, a aba apenas avisa.
+ */
+function mrr_render_market($vars)
+{
+    mrr_admin_header(
+        '<i class="fas fa-gift"></i> Módulos grátis',
+        'Outros módulos que a Hostcel publica para o WHMCS',
+        'market'
+    );
+
+    echo '<div class="panel panel-default"><div class="panel-body">';
+    echo '<h4 class="mrr-tight">Modulos gratuitos da Hostcel</h4>';
+    echo '<p class="text-muted mrr-tight">Modulos que publicamos para o WHMCS. '
+        . 'Baixe direto do GitHub e instale em <kbd>/modules/addons/</kbd>.</p>';
+    echo '</div></div>';
+
+    $market = mrr_marketplace();
+
+    if (!$market) {
+        echo '<div class="alert alert-info">Nao foi possivel carregar a lista agora. '
+            . 'Tente novamente mais tarde.</div>';
+    } else {
+        echo '<div class="mrr-market-grid">';
+        foreach ($market as $m) {
+            $title  = htmlspecialchars((string) ($m['title'] ?? ''));
+            $descM  = htmlspecialchars((string) ($m['desc'] ?? ''));
+            $cover  = trim((string) ($m['cover'] ?? ''));
+            $gh     = trim((string) ($m['github'] ?? ''));
+            $badgeM = trim((string) ($m['badge'] ?? ''));
+            if ($title === '') {
+                continue;
+            }
+            // Card do painel do proprio tema; a grade e a capa (sempre 2:1)
+            // ficam no CSS de layout.
+            echo '<div class="panel panel-default mrr-market-card">';
+            if ($cover !== '') {
+                echo '<img src="' . htmlspecialchars($cover) . '" alt="' . $title . '" width="1200" height="600">';
+            }
+            echo '<div class="panel-heading"><h3 class="panel-title">' . $title
+                . ($badgeM !== '' ? ' <span class="label label-success">' . htmlspecialchars($badgeM) . '</span>' : '')
+                . '</h3></div>';
+            echo '<div class="panel-body"><p class="text-muted">' . $descM . '</p></div>';
+            if ($gh !== '') {
+                echo '<div class="panel-footer"><a href="' . htmlspecialchars($gh) . '" target="_blank" '
+                    . 'rel="noopener" class="btn btn-primary btn-block">Ver no GitHub</a></div>';
+            }
+            echo '</div>';
+        }
+        echo '</div>';
+    }
+
+    echo '</div>'; // .mrr
+}

@@ -1,8 +1,378 @@
 <?php
 /**
- * MRR Analytics — modulo WHMCS da Hostcel.
- * Codigo protegido. Uso gratuito nos termos do LICENSE.
- * https://github.com/Hostcel/mrr-analytics
+ * MRR Analytics - API de Relatórios via WhatsApp
+ * Script para ser executado via cron para envio automático de relatórios
+ * 
+ * Uso: php /path/to/modules/addons/mrr/api.php
  */
-if(!function_exists('gzinflate')){die('Extensao zlib necessaria.');}
-eval(gzinflate(base64_decode('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')));
+
+use WHMCS\Database\Capsule;
+
+// Inicializar WHMCS
+$whmcsPath = dirname(dirname(dirname(__DIR__)));
+require_once $whmcsPath . '/init.php';
+
+// Mesmo motor do painel. Ter dois calculos era o que fazia o relatorio do
+// WhatsApp divergir do dashboard.
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/calc.php';
+
+date_default_timezone_set('America/Recife');
+
+/**
+ * Função para extrair telefones das notas
+ */
+function mrr_extract_phones_from_notes($notes)
+{
+    $phones = [];
+    if (preg_match_all('/\{(\d{10,16})\}/', $notes, $matches)) {
+        foreach ($matches[1] as $match) {
+            if (strlen($match) >= 10 && strlen($match) <= 16) {
+                $phones[] = $match;
+            }
+        }
+    }
+    return $phones;
+}
+
+/**
+ * Função para obter telefones dos administradores
+ */
+function mrr_get_admin_phones($adminPhoneField)
+{
+    $phones = [];
+    try {
+        $admins = Capsule::table('tbladmins')
+            ->select('*')
+            ->where('disabled', 0)
+            ->get();
+
+        foreach ($admins as $admin) {
+            // Campo direto (ex: mobilenumber)
+            if ($adminPhoneField && isset($admin->{$adminPhoneField})) {
+                $raw = trim((string)$admin->{$adminPhoneField});
+                if ($raw !== '') {
+                    $num = preg_replace('/\D+/', '', $raw);
+                    if (strlen($num) >= 10 && strlen($num) <= 16) {
+                        $phones[] = $num;
+                    }
+                }
+            }
+            
+            // Telefones nas notas no formato {5581999999999}
+            if (!empty($admin->notes)) {
+                $phones = array_merge($phones, mrr_extract_phones_from_notes($admin->notes));
+            }
+        }
+    } catch (Exception $e) {
+        mrr_log("Erro ao buscar telefones de admins: " . $e->getMessage());
+    }
+    
+    return array_values(array_unique($phones));
+}
+
+/**
+ * Função de envio de mensagem via WhatsApp
+ */
+function mrr_send_whatsapp($numero, $mensagem, $config)
+{
+    // Normaliza ANTES de enviar. Sem isto, "81 99326-7690" ia cru para a API,
+    // que respondia HTTP 200 "queued" e nunca entregava — faltava o DDI 55.
+    $original = $numero;
+    $numero   = mrr_phone_e164($numero);
+
+    if ($numero === '') {
+        mrr_log("Numero invalido, envio abortado: {$original}");
+
+        return false;
+    }
+
+    $dados = http_build_query([
+        'number' => $numero,
+        'type' => 'text',
+        'message' => $mensagem,
+        'instance_id' => $config['whatsapp_instance_id'],
+        'access_token' => $config['whatsapp_access_token']
+    ]);
+
+    $ch = curl_init($config['whatsapp_url']);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $dados);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    
+    $resp = curl_exec($ch);
+    $err = curl_error($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    // HTTP 200 nao basta: a API devolve 200 mesmo recusando o envio.
+    $corpo = json_decode((string) $resp, true);
+    $ok    = $http_code === 200
+        && (!is_array($corpo) || (($corpo['status'] ?? '') !== 'error'));
+
+    $comoFoi = $original === $numero ? $numero : "{$original} -> {$numero}";
+    mrr_log("Envio {$comoFoi} | HTTP: {$http_code} | " . ($err ? "Erro: {$err}" : ($ok ? 'OK' : 'RECUSADO')) . " | Resposta: {$resp}");
+
+    return $ok;
+}
+
+/**
+ * Função de log
+ */
+function mrr_log($message)
+{
+    $logFile = __DIR__ . '/log_whatsapp.txt';
+    $timestamp = date('d/m/Y H:i:s');
+    file_put_contents($logFile, "[{$timestamp}] {$message}\n", FILE_APPEND);
+    echo "[{$timestamp}] {$message}\n";
+}
+
+/**
+ * Gera mensagem de relatório
+ */
+function mrr_generate_report_message($frequency)
+{
+    // Mesmo motor do painel (calc.php). O mes fechado tambem e gravado como
+    // retrato, para o historico crescer sozinho a cada execucao do cron.
+    $mrrM1 = mrr_snapshot(mrr_month_start(1));
+    $mrrM2 = mrr_snapshot(mrr_month_start(2));
+    mrr_store_snapshot($mrrM1);
+
+    $totalMRR_M1 = $mrrM1['mrr_total'];
+    $totalMRR_M2 = $mrrM2['mrr_total'];
+    $servicesMRR_M1 = $mrrM1['by_group'];
+    
+    // Calcular variação
+    $variationPercentage = 0;
+    $variationAbsolute = $totalMRR_M1 - $totalMRR_M2;
+    
+    if ($totalMRR_M2 > 0) {
+        $variationPercentage = (($totalMRR_M1 - $totalMRR_M2) / $totalMRR_M2) * 100;
+    }
+    
+    $variationIcon = $variationPercentage >= 0 ? '📈' : '📉';
+    $variationText = $variationPercentage >= 0 ? 'Crescimento' : 'Queda';
+    
+    // Formatação
+    $totalMRR_M1_Formatted = 'R$ ' . number_format($totalMRR_M1, 2, ',', '.');
+    $totalMRR_M2_Formatted = 'R$ ' . number_format($totalMRR_M2, 2, ',', '.');
+    $variationPercentageFormatted = number_format(abs($variationPercentage), 2, ',', '.');
+    $variationAbsoluteFormatted = 'R$ ' . number_format(abs($variationAbsolute), 2, ',', '.');
+    $totalARR_Formatted = 'R$ ' . number_format($totalMRR_M1 * 12, 2, ',', '.');
+    
+    // Nomes dos meses
+    $monthNames = [
+        '01' => 'Janeiro', '02' => 'Fevereiro', '03' => 'Março',
+        '04' => 'Abril', '05' => 'Maio', '06' => 'Junho',
+        '07' => 'Julho', '08' => 'Agosto', '09' => 'Setembro',
+        '10' => 'Outubro', '11' => 'Novembro', '12' => 'Dezembro'
+    ];
+    
+    $m1Start = $mrrM1['period_start'];
+    $m2Start = $mrrM2['period_start'];
+    $m1Name  = $monthNames[date('m', strtotime($m1Start))] . '/' . date('Y', strtotime($m1Start));
+    $m2Name  = $monthNames[date('m', strtotime($m2Start))] . '/' . date('Y', strtotime($m2Start));
+    
+    // Montar mensagem
+    $frequencyLabel = [
+        'daily' => 'Diário',
+        'weekly' => 'Semanal',
+        'monthly' => 'Mensal'
+    ];
+    
+    $message = "📊 *RELATÓRIO MRR " . strtoupper($frequencyLabel[$frequency]) . "*\n\n";
+    $message .= "🗓️ *Comparação de Meses Completos*\n";
+    $message .= "━━━━━━━━━━━━━━━━━━━━━━\n\n";
+    
+    $message .= "📅 *{$m2Name}* (M-2)\n";
+    $message .= "MRR: *{$totalMRR_M2_Formatted}*\n\n";
+    
+    $message .= "{$variationIcon} *{$variationText}*: *{$variationPercentageFormatted}%*\n";
+    $message .= "Diferença: {$variationAbsoluteFormatted}\n\n";
+    
+    $message .= "📅 *{$m1Name}* (M-1)\n";
+    $message .= "MRR: *{$totalMRR_M1_Formatted}*\n";
+    $message .= "ARR Projetado: *{$totalARR_Formatted}*\n\n";
+    
+    $message .= "━━━━━━━━━━━━━━━━━━━━━━\n";
+    $message .= "📈 *Top Categorias ({$m1Name})*\n\n";
+    
+    // Top 5 categorias
+    arsort($servicesMRR_M1);
+    $topCategories = array_slice($servicesMRR_M1, 0, 5, true);
+    $position = 1;
+    
+    foreach ($topCategories as $category => $mrr) {
+        $percentage = $totalMRR_M1 > 0 ? round(($mrr / $totalMRR_M1) * 100, 1) : 0;
+        $categoryMRRFormatted = 'R$ ' . number_format($mrr, 2, ',', '.');
+        $message .= "{$position}. *{$category}*\n";
+        $message .= "   {$categoryMRRFormatted} ({$percentage}%)\n\n";
+        $position++;
+    }
+    
+    $message .= "━━━━━━━━━━━━━━━━━━━━━━\n";
+    $message .= "✅ Dados 100% precisos baseados em meses completos\n";
+    $message .= "🔗 Acesse o WHMCS para visualizar o dashboard completo";
+    
+    return $message;
+}
+
+/**
+ * Verifica se deve enviar relatório baseado na frequência
+ */
+function mrr_should_send_report($frequency, $hour)
+{
+    $currentHour = (int)date('H');
+    $currentDay = (int)date('d');
+    $currentWeekday = (int)date('N'); // 1 = segunda, 7 = domingo
+    
+    // Verifica se está no horário correto
+    if ($currentHour != $hour) {
+        return false;
+    }
+    
+    switch ($frequency) {
+        case 'daily':
+            // Envia todo dia no horário configurado
+            return true;
+            
+        case 'weekly':
+            // Envia toda segunda-feira (1) no horário configurado
+            return $currentWeekday == 1;
+            
+        case 'monthly':
+            // Envia no primeiro dia do mês no horário configurado
+            return $currentDay == 1;
+            
+        default:
+            return false;
+    }
+}
+
+// ============================================================================
+// EXECUÇÃO PRINCIPAL — SOMENTE VIA CRON (linha de comando)
+// ============================================================================
+
+// Sem esta trava o arquivo disparava relatorio para todos os admins em dois
+// casos: (1) o painel faz require deste arquivo na aba "Testar WhatsApp", e o
+// fluxo abaixo rodava junto, terminando em exit(0) e matando a pagina;
+// (2) qualquer pessoa abrindo /modules/addons/mrr/api.php no navegador.
+// Pelo cron (php CLI) nada muda.
+if (PHP_SAPI !== 'cli') {
+    return;
+}
+
+mrr_log("========================================");
+mrr_log("Iniciando verificação de relatórios MRR");
+
+// Carregar configurações — exclusivas deste módulo, sem herdar de outros.
+$settings = Capsule::table('tbladdonmodules')
+    ->where('module', 'mrr')
+    ->pluck('value', 'setting')
+    ->toArray();
+
+// Somente a configuracao DESTE modulo — sem herdar de outros.
+$config = [
+    'whatsapp_url'          => mrr_setting('whatsapp_url'),
+    'whatsapp_instance_id'  => mrr_setting('whatsapp_instance_id'),
+    'whatsapp_access_token' => mrr_setting('whatsapp_access_token'),
+    'whatsapp_enabled'      => mrr_setting_on('whatsapp_enabled'),
+    'report_frequency'      => $settings['report_frequency'] ?? 'monthly',
+    'report_hour'           => (int) ($settings['report_hour'] ?? 9),
+    // telefone vem das notes {numero}; tbladmins não tem coluna de celular.
+    'admin_phone_field'     => $settings['admin_phone_field'] ?? '',
+];
+
+// Verificar se está habilitado
+if (!$config['whatsapp_enabled']) {
+    mrr_log("Relatórios via WhatsApp desabilitados");
+    exit;
+}
+
+// Verificar se deve enviar baseado na frequência
+if (!mrr_should_send_report($config['report_frequency'], $config['report_hour'])) {
+    mrr_log("Não é hora de enviar relatório. Frequência: {$config['report_frequency']}, Hora configurada: {$config['report_hour']}h, Hora atual: " . date('H') . "h");
+    exit;
+}
+
+mrr_log("Condições atendidas. Iniciando envio de relatório {$config['report_frequency']}");
+
+// Obter números de administradores
+$adminPhones = mrr_get_admin_phones($config['admin_phone_field']);
+
+if (empty($adminPhones)) {
+    mrr_log("ERRO: Nenhum número de administrador configurado");
+    exit;
+}
+
+mrr_log("Números de administradores encontrados: " . count($adminPhones));
+
+// Anti-duplicação: já enviou este tipo de relatório nesta hora? (cron roda de hora em hora)
+try {
+    $jaEnviou = Capsule::table('mod_mrr_logs')
+        ->where('report_type', $config['report_frequency'])
+        ->where('sent_at', '>=', date('Y-m-d H:00:00'))
+        ->exists();
+    if ($jaEnviou) {
+        mrr_log('Relatório já enviado nesta hora. Ignorando duplicata.');
+        exit;
+    }
+} catch (\Throwable $e) { /* tabela pode não existir ainda — segue */ }
+
+// Gerar mensagem do relatório
+try {
+    $message = mrr_generate_report_message($config['report_frequency']);
+} catch (\Throwable $e) {
+    mrr_log('ERRO ao gerar relatório: ' . $e->getMessage());
+    exit(1);
+}
+
+// Enviar para cada administrador
+$totalSent = 0;
+$totalFailed = 0;
+$sentPhones = [];
+
+foreach ($adminPhones as $phone) {
+    mrr_log("Enviando para: {$phone}");
+    
+    if (mrr_send_whatsapp($phone, $message, $config)) {
+        $totalSent++;
+        $sentPhones[] = $phone;
+        mrr_log("✓ Enviado com sucesso para {$phone}");
+    } else {
+        $totalFailed++;
+        mrr_log("✗ Falha ao enviar para {$phone}");
+    }
+    
+    // Pequeno delay entre envios
+    sleep(1);
+}
+
+// Registrar log no banco
+try {
+    Capsule::table('mod_mrr_logs')->insert([
+        'report_type' => $config['report_frequency'],
+        'phone_numbers' => json_encode($sentPhones),
+        'message_content' => $message,
+        'total_sent' => $totalSent,
+        'total_failed' => $totalFailed,
+        'sent_at' => date('Y-m-d H:i:s'),
+        'response_log' => "Enviados: {$totalSent}, Falhas: {$totalFailed}"
+    ]);
+    
+    mrr_log("Log registrado no banco de dados");
+} catch (Exception $e) {
+    mrr_log("Erro ao registrar log: " . $e->getMessage());
+}
+
+// Relatório final
+mrr_log("========================================");
+mrr_log("RESUMO DO ENVIO:");
+mrr_log("Total de envios bem-sucedidos: {$totalSent}");
+mrr_log("Total de falhas: {$totalFailed}");
+mrr_log("========================================");
+
+exit(0);

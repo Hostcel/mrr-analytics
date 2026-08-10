@@ -1,8 +1,213 @@
 <?php
 /**
- * MRR Analytics — modulo WHMCS da Hostcel.
- * Codigo protegido. Uso gratuito nos termos do LICENSE.
- * https://github.com/Hostcel/mrr-analytics
+ * MRR Analytics — constantes, regras de negocio e helpers.
+ *
+ * Este modulo e AUTOSSUFICIENTE: nao le configuracao de nenhum outro modulo.
+ * Quem instalar so o MRR tem que conseguir usar tudo.
+ *
+ * @version 2.3.0
+ * @author  Hostcel
  */
-if(!function_exists('gzinflate')){die('Extensao zlib necessaria.');}
-eval(gzinflate(base64_decode('pVZbT+M4FP4rHqmapJpeYeABFtgOhBm00LJt2NEIUOQmbuMdx44ch261w3/fc5y0JCnwshIg8vlcvnO1+YK4HyK24JJFrvP92835zGm3yb8k4sx1RiHLMgX/a2YUkVSRlOmEGx6pntM+Js+kUHWdm+k0+Mubzq4mY6dDnL3efm+AEtVzf/Tl2gu+Xc38yfQHSiUqChKtg5hnRun16/LXk6+zqrBQy6wpObvyPZSJjUmzo35/tVr1YpWZkIleqJLeXDc1wOrkfY0+OFK97GnZVL2YfB9fT0YXwd30umpiyU2cz1G7X1rqA98ulVSsDQ93SN/dXox8L7gZja8uvZlfNdVgEqmVFIpGWT+hki8YZKuXxulZcgIOmmZvRtM/PP9/mlVRLpRlvMhlaLiSBHM/50JwuQzCdShY5mKfQGfkWpJ74twoaWKxdsjJKRmC1z9zqg3TJbIPyIwlvDuSMqeiRA9LlDbBmtRwD5AvnEnJt9jeZ8B8XQf3UfVSM0ZGYahyaSw6AHAiGfF5wjbAIzZvLbbMUMOygALyxGqhwRgg5rypo3n2s64xy7OUyYhFbyvZ47rWOZVQHgFaGBtOmgRR+3Wpaf6OMb6USjfN3YILqNbbWjZFda1XMrGrzYwBu24rjOkT65AWtB/NhSEnxHHQFhrgIWmFNIwZoDIX4phwWDUb6KQAUdjoNfzdyj7YHfRwQQ2d04w9nNM0ywU7OoJvAS1u5oJGkZK2RRm0KOmermKm4aiA7K7AseiepiIPf7rOExW5hUvieGTUSGu6LqILqQlj4j74sVYrdENarF0ldW9T+ExaT/BRoPdF9I/k7AyiPt7kz0WRE0wE+fWLlB9FqGcviToibmY0UGmDyFv5DZQsU1ypD5cBtcRB3yihVky7uzVptztQfyUx6CH+MbrIwBoyhongifPYIYjuljeNlWQBGx5+dltznRtlUyEh8lSzZaBZKmgI6e4/XHzqozX4fQmn0CirLctcVALAXD3bU1BJVQZCYOLgAGRQdkA+frRHgkH0sgCHe5jMJrjfrphtyYrZmtjgNd1hlRE4J73XLZyiLFKqYL8BdrDjuhZeLZ8JpHMNfVF1OW0R9CnzZM50sFA6ocZ1F7CNDbZEh+DG62Byy3u2adHEOKbauC37kY2WCgo0qPhwJVsRGCOGa891FlxnhkR0TdSCGLhxiVUkg8GR/cFbv3sKI8QXa9fpIjuXS2Tz4qAHpO2XnbqStfOjm3QHw1doLhiMVfB3hn2ca9EpJ2dME1waxghgvH84GNRGLVtnwZKZwLAkDeDhAcsJ3PZthbbqRXtx2LyMRnYvFGdt2z0GAwaGZQALLlhisVIISmjdW78R+ESKQcRCFTF328moZpmEEDGTJtuob+em5FDMYyuqtWNULIzNcovBSwg5CLjkxmYD9C0Ag6tSszESxjC45BxeFpNbP5h6/t107E9H49mlN8WbCz13tufnk/HYO/f9qxtvcufj+cHLYQUdDl7gu5k3HX31xvYAHwxwIZcPFJvkykMObklg2dJ0tWHP/mEhkkQYs7XBIU1cLlTBHz1djS8nwTffvwWOF94m1hDeFKzUL24DawMGcm9gBx99vV8VlHi3AL/buqX5Tt06hfXjZoneXv/bob7fvUEFXpHG3ZJt9Psr77viWioVeyjlvJD5AN1uMIZ754npDLw4j8WNAXdFcX02dwDVP5kpVvF7LBrPwZJFod1kwTPoRkti8wB8tBNVyXHtCPlVALzWquXY8L9/tLvhPw==')));
+
+if (!defined('WHMCS')) {
+    die('Acesso direto nao permitido.');
+}
+
+define('MRR_VERSION', '2.3.0');
+define('MRR_TABLE_HISTORY', 'mod_mrr_history');
+define('MRR_TABLE_LOGS', 'mod_mrr_logs');
+
+define('MRR_SITE', 'https://www.hostcel.com.br');
+define('MRR_LOGO', 'https://www.hostcel.com.br/logo.svg');
+define('MRR_DOWNLOAD_URL', 'https://github.com/hostcel/mrr-analytics');
+define('MRR_UPDATE_MANIFEST', 'https://hostcel.com.br/downloads/manifesto.php?m=mrr');
+define('MRR_MARKET_MANIFEST', 'https://hostcel.com.br/downloads/manifesto.php?m=modulos');
+
+/**
+ * Quantos meses cada ciclo de cobranca cobre.
+ *
+ * Os nomes sao os que o WHMCS grava em tblhosting.billingcycle — inclusive
+ * 'Semi-Annually' COM hifen, que ja custou um MRR inflado em 18%.
+ * 'Free Account' e 'One Time' entram com 0: nao geram receita recorrente,
+ * mas continuam contando como contrato.
+ */
+function mrr_billing_cycles()
+{
+    return [
+        'Monthly'       => 1,
+        'Quarterly'     => 3,
+        'Semi-Annually' => 6,
+        'Semiannually'  => 6,
+        'Annually'      => 12,
+        'Biennially'    => 24,
+        'Triennially'   => 36,
+        'Free Account'  => 0,
+        'One Time'      => 0,
+    ];
+}
+
+/** Status que representam contrato ativo e faturando. */
+function mrr_states_active()
+{
+    return ['Active'];
+}
+
+/** Suspenso NAO conta no MRR — "so o que eu recebi". */
+function mrr_states_risk()
+{
+    return ['Suspended'];
+}
+
+/** Status que encerram o contrato. */
+function mrr_states_ended()
+{
+    return ['Cancelled', 'Terminated', 'Fraud'];
+}
+
+/** Status que ainda nao viraram contrato. */
+function mrr_states_ignored()
+{
+    return ['Pending'];
+}
+
+/** Status que somam MRR: SOMENTE ativos. */
+function mrr_states_counted()
+{
+    return mrr_states_active();
+}
+
+/**
+ * Le uma configuracao DESTE modulo. Sem heranca de outros modulos.
+ */
+function mrr_setting($chave, $default = '')
+{
+    static $cache = null;
+
+    if ($cache === null) {
+        try {
+            $cache = \WHMCS\Database\Capsule::table('tbladdonmodules')
+                ->where('module', 'mrr')->pluck('value', 'setting')->toArray();
+        } catch (\Throwable $e) {
+            $cache = [];
+        }
+    }
+
+    $v = $cache[$chave] ?? '';
+
+    return ($v === '' || $v === null) ? $default : (string) $v;
+}
+
+/** A configuracao esta marcada como ligada? */
+function mrr_setting_on($chave)
+{
+    return in_array(strtolower(mrr_setting($chave)), ['on', '1', 'true', 'yes', 'sim'], true);
+}
+
+/**
+ * Normaliza um telefone para o formato internacional que a API espera.
+ *
+ * Sem isso o modulo mandava "81 99326-7690" exatamente como digitado: a API
+ * respondia HTTP 200 "queued" e a mensagem nunca chegava, porque falta o DDI.
+ * Aceita mascara, espaco, parenteses, +55 e numero sem o 9 antigo.
+ *
+ * @return string vazio se nao parecer um telefone valido
+ */
+function mrr_phone_e164($bruto)
+{
+    $n = preg_replace('/\D+/', '', (string) $bruto);
+
+    if ($n === '') {
+        return '';
+    }
+
+    // Ja veio com DDI do Brasil e tamanho coerente (55 + DDD + 8 ou 9 digitos).
+    if (strpos($n, '55') === 0 && (strlen($n) === 12 || strlen($n) === 13)) {
+        return $n;
+    }
+
+    // DDD + numero, sem DDI.
+    if (strlen($n) === 10 || strlen($n) === 11) {
+        return '55' . $n;
+    }
+
+    // Outro pais: aceita se tiver tamanho plausivel.
+    if (strlen($n) >= 11 && strlen($n) <= 15) {
+        return $n;
+    }
+
+    return '';
+}
+
+/** Formata moeda no padrao brasileiro, sem depender de locale do servidor. */
+function mrr_money($v)
+{
+    return 'R$ ' . number_format((float) $v, 2, ',', '.');
+}
+
+/** Primeiro dia do mes, N meses atras (0 = mes corrente). */
+function mrr_month_start($monthsAgo = 0)
+{
+    return (new DateTime('first day of this month 00:00:00'))
+        ->modify('-' . (int) $monthsAgo . ' month')
+        ->format('Y-m-01');
+}
+
+/**
+ * Busca um JSON remoto com cache em disco. Falha em silencio.
+ *
+ * TTL de 1 hora, igual ao hostcelapp. Com 6 horas a vitrine ficava exibindo
+ * uma lista velha depois de publicar um modulo novo no manifesto.
+ */
+function mrr_fetch_json($url, $cacheName, $ttl = 3600)
+{
+    $cache = sys_get_temp_dir() . '/' . $cacheName;
+
+    if (is_readable($cache) && (time() - (int) filemtime($cache)) < $ttl) {
+        $d = json_decode((string) file_get_contents($cache), true);
+        if (is_array($d)) {
+            return $d;
+        }
+    }
+
+    try {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_TIMEOUT        => 10,
+            CURLOPT_USERAGENT      => 'MRR-Analytics/' . MRR_VERSION,
+        ]);
+        $raw  = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($code === 200 && $raw) {
+            $d = json_decode((string) $raw, true);
+            if (is_array($d)) {
+                @file_put_contents($cache, $raw);
+
+                return $d;
+            }
+        }
+    } catch (\Throwable $e) {
+        // sem rede: segue sem novidade
+    }
+
+    return [];
+}
+
+/** Ultima versao publicada deste modulo, ou null se nao der para checar. */
+function mrr_latest()
+{
+    $d = mrr_fetch_json(MRR_UPDATE_MANIFEST, 'mrr_latest.json');
+
+    return !empty($d['version']) ? $d : null;
+}
+
+/** Outros modulos gratuitos publicados pela Hostcel. */
+function mrr_marketplace()
+{
+    $d = mrr_fetch_json(MRR_MARKET_MANIFEST, 'mrr_market.json');
+
+    return isset($d['modulos']) && is_array($d['modulos']) ? $d['modulos'] : (is_array($d) ? $d : []);
+}

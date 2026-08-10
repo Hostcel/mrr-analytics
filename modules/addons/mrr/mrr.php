@@ -1,8 +1,194 @@
 <?php
 /**
- * MRR Analytics — modulo WHMCS da Hostcel.
- * Codigo protegido. Uso gratuito nos termos do LICENSE.
- * https://github.com/Hostcel/mrr-analytics
+ * MRR Analytics — receita recorrente mensal do seu WHMCS.
+ *
+ * Mostra a evolucao mes a mes (nao um retrato repetido), separa o que esta
+ * suspenso, lista TODOS os produtos e guarda um retrato fechado de cada mes
+ * para que o historico nao dependa de reconstrucao.
+ *
+ * A interface usa as classes do proprio WHMCS, para acompanhar o tema do
+ * painel em vez de impor cores proprias.
+ *
+ * @version 2.3.0
+ * @author  Hostcel
  */
-if(!function_exists('gzinflate')){die('Extensao zlib necessaria.');}
-eval(gzinflate(base64_decode('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')));
+
+if (!defined('WHMCS')) {
+    die('Acesso direto nao permitido.');
+}
+
+use WHMCS\Database\Capsule;
+
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/calc.php';
+require_once __DIR__ . '/admin/index.php';
+
+function mrr_config()
+{
+    return [
+        'name'        => 'MRR Analytics',
+        'description' => 'Mostra o DINHEIRO recebido mes a mes, por produto, mais a receita '
+            . 'recorrente (MRR), novos contratos e cancelamentos. Relatorio opcional por WhatsApp.',
+        'version'     => MRR_VERSION,
+        'author'      => "<a href='https://www.hostcel.com.br' target='_blank'>Hostcel</a>",
+        'language'    => 'portuguese-br',
+        'fields'      => [
+            'whatsapp_enabled' => [
+                'FriendlyName' => 'Relatorio por WhatsApp',
+                'Type'         => 'yesno',
+                'Description'  => 'Envia o resumo do mes fechado. Requer o cron abaixo.',
+                'Default'      => 'off',
+            ],
+            'report_frequency' => [
+                'FriendlyName' => 'Frequencia',
+                'Type'         => 'dropdown',
+                'Options'      => [
+                    'daily'   => 'Diario',
+                    'weekly'  => 'Semanal (segunda-feira)',
+                    'monthly' => 'Mensal (dia 1)',
+                ],
+                'Default'      => 'monthly',
+            ],
+            'report_hour' => [
+                'FriendlyName' => 'Horario',
+                'Type'         => 'text',
+                'Size'         => '5',
+                'Default'      => '09',
+                'Description'  => 'Hora cheia, 00 a 23.',
+            ],
+            'whatsapp_url' => [
+                'FriendlyName' => 'URL da API',
+                'Type'         => 'text',
+                'Size'         => '80',
+                'Description'  => 'Endpoint da sua API de WhatsApp.',
+            ],
+            'whatsapp_instance_id' => [
+                'FriendlyName' => 'Instance ID',
+                'Type'         => 'text',
+                'Size'         => '40',
+                'Description'  => 'Credencial da sua instancia.',
+            ],
+            'whatsapp_access_token' => [
+                'FriendlyName' => 'Access Token',
+                'Type'         => 'password',
+                'Size'         => '40',
+                'Description'  => 'Credencial da sua instancia.',
+            ],
+            'sobre' => [
+                'FriendlyName' => 'Sobre',
+                'Description'  => 'MRR Analytics v' . MRR_VERSION . ' &copy; ' . date('Y')
+                    . ' Hostcel. Cron do relatorio: <kbd>0 * * * * php '
+                    . rtrim((string) ($_SERVER['DOCUMENT_ROOT'] ?? ''), '/')
+                    . '/modules/addons/mrr/api.php</kbd>',
+            ],
+        ],
+    ];
+}
+
+function mrr_activate()
+{
+    try {
+        if (!Capsule::schema()->hasTable(MRR_TABLE_HISTORY)) {
+            Capsule::schema()->create(MRR_TABLE_HISTORY, function ($t) {
+                $t->increments('id');
+                $t->date('period_date');
+                $t->decimal('total_mrr', 15, 2)->default(0);
+                $t->decimal('services_mrr', 15, 2)->default(0);
+                $t->decimal('domains_mrr', 15, 2)->default(0);
+                $t->decimal('expansion_mrr', 15, 2)->default(0);
+                $t->decimal('churn_mrr', 15, 2)->default(0);
+                $t->text('categories_breakdown')->nullable();
+                $t->timestamp('calculated_at')->nullable();
+                $t->unique('period_date');
+            });
+        }
+
+        if (!Capsule::schema()->hasTable(MRR_TABLE_LOGS)) {
+            Capsule::schema()->create(MRR_TABLE_LOGS, function ($t) {
+                $t->increments('id');
+                $t->string('report_type', 20);
+                $t->text('phone_numbers');
+                $t->text('message_content');
+                $t->integer('total_sent')->default(0);
+                $t->integer('total_failed')->default(0);
+                $t->timestamp('sent_at')->nullable();
+                $t->text('response_log')->nullable();
+            });
+        }
+
+        // Nasce com historico: reconstroi os 12 meses fechados anteriores.
+        $gravados = 0;
+        for ($i = 12; $i >= 1; $i--) {
+            if (mrr_store_snapshot(mrr_snapshot(mrr_month_start($i)))) {
+                $gravados++;
+            }
+        }
+
+        return [
+            'status'      => 'success',
+            'description' => 'MRR Analytics v' . MRR_VERSION . ' ativado. '
+                . $gravados . ' meses de historico reconstruidos.',
+        ];
+    } catch (\Throwable $e) {
+        return ['status' => 'error', 'description' => 'Erro ao ativar: ' . $e->getMessage()];
+    }
+}
+
+function mrr_deactivate()
+{
+    // Historico preservado: reativar nao recomeca do zero.
+    return ['status' => 'success', 'description' => 'Desativado. Historico preservado.'];
+}
+
+function mrr_upgrade($vars)
+{
+    try {
+        // A 1.x nunca gravou retrato nenhum: repopula ao atualizar.
+        if (Capsule::schema()->hasTable(MRR_TABLE_HISTORY)) {
+            for ($i = 12; $i >= 1; $i--) {
+                mrr_store_snapshot(mrr_snapshot(mrr_month_start($i)));
+            }
+        }
+    } catch (\Throwable $e) {
+        // upgrade nao pode derrubar a ativacao
+    }
+
+    return ['status' => 'success', 'description' => 'Atualizado para v' . MRR_VERSION];
+}
+
+function mrr_output($vars)
+{
+    mrr_admin_dispatcher($vars);
+}
+
+/**
+ * Barra lateral: identidade do modulo, nao navegacao.
+ * As abas ja estao no topo da tela; repetir os links aqui era ruido.
+ */
+function mrr_sidebar($vars)
+{
+    $latest = mrr_latest();
+    $nova   = $latest && version_compare((string) $latest['version'], MRR_VERSION, '>');
+
+    $s  = '<div class="panel panel-default">';
+    $s .= '<div class="panel-body text-center">';
+    $s .= '<a href="' . MRR_SITE . '" target="_blank" rel="noopener">';
+    $s .= '<img src="' . MRR_LOGO . '" alt="Hostcel" style="max-width:150px;max-height:46px;margin-bottom:10px;">';
+    $s .= '</a>';
+    $s .= '<h4 style="margin:6px 0 4px;font-weight:600;">MRR Analytics</h4>';
+    $s .= '<p class="text-muted" style="font-size:12px;margin-bottom:10px;">'
+        . 'Dinheiro recebido mes a mes e receita recorrente do seu WHMCS, com quebra por produto '
+        . 'e cancelamentos.</p>';
+    $s .= '<span class="label label-' . ($nova ? 'warning' : 'default') . '">v' . MRR_VERSION . '</span>';
+    if ($nova) {
+        $s .= ' <span class="label label-success">v' . htmlspecialchars((string) $latest['version']) . ' disponivel</span>';
+    }
+    $s .= '</div>';
+    $s .= '<div class="panel-footer text-center" style="font-size:11px;">';
+    $s .= '<a href="' . MRR_SITE . '" target="_blank" rel="noopener">hostcel.com.br</a>';
+    $s .= ' &middot; &copy; ' . date('Y') . ' Hostcel';
+    $s .= '</div>';
+    $s .= '</div>';
+
+    return $s;
+}
