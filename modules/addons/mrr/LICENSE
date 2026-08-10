@@ -1,0 +1,71 @@
+LICENÇA DE USO — MRR ANALYTICS (módulo WHMCS)
+
+Copyright (c) 2026 Hostcel — https://www.hostcel.com.br
+
+Este software é distribuído GRATUITAMENTE, em formato protegido, nos termos
+abaixo. Ao instalar ou usar o módulo, você concorda com eles.
+
+
+1. O QUE VOCÊ PODE FAZER
+
+   a) Instalar e usar o módulo, sem custo, em quantas instalações do WHMCS a sua
+      empresa ou o seu grupo econômico operar.
+   b) Fazer cópias de segurança do pacote para uso próprio.
+   c) Usar os relatórios e os números gerados pelo módulo livremente, inclusive
+      em apresentações e documentos da sua empresa.
+
+
+2. O QUE VOCÊ NÃO PODE FAZER
+
+   a) Revender, sublicenciar, alugar ou cobrar de terceiros pelo módulo.
+   b) Redistribuir o pacote, no todo ou em parte, por qualquer meio — inclusive
+      republicando em outro repositório, site de downloads ou marketplace.
+      Indique o repositório oficial em vez de hospedar uma cópia.
+   c) Remover, alterar ou ocultar avisos de autoria, marca ou origem.
+   d) Desofuscar, fazer engenharia reversa ou tentar contornar a proteção do
+      código dos arquivos protegidos.
+   e) Apresentar o módulo, modificado ou não, como sendo de sua autoria.
+
+
+3. O QUE O MÓDULO FAZ NO SEU WHMCS
+
+   O módulo apenas LÊ o seu banco de dados para calcular o dinheiro recebido e a
+   receita recorrente: pagamentos, serviços, produtos e domínios. Ele não altera
+   faturas, preços, produtos, clientes nem templates, e não acessa senha nem dado
+   de cartão.
+
+   Escreve somente nas próprias tabelas (mod_mrr_history e mod_mrr_logs), que
+   guardam o retrato mensal e o registro dos relatórios enviados.
+
+   O envio opcional de relatório por WhatsApp usa a API que VOCÊ configurar na
+   tela do módulo, e envia apenas para os números que você cadastrar. Nenhum dado
+   é enviado à Hostcel.
+
+   A biblioteca de gráficos (assets/chart.umd.min.js) é o Chart.js, de terceiros,
+   distribuído sob licença MIT e mantido sem alteração.
+
+
+4. SEM GARANTIA
+
+   O software é fornecido "COMO ESTÁ", sem garantia de qualquer tipo, expressa
+   ou implícita, incluindo — sem se limitar a — garantias de adequação a uma
+   finalidade específica ou de funcionamento ininterrupto. Os números
+   apresentados são informativos e não substituem a sua contabilidade. Os autores
+   não respondem por decisões tomadas com base neles, nem por indisponibilidade,
+   perda de dados ou lucros cessantes. Mantenha backup do seu WHMCS.
+
+
+5. CONTRIBUIÇÕES
+
+   Relatos de erro e sugestões são bem-vindos pelas issues do repositório
+   oficial. Ao enviar informações, você autoriza o uso delas para corrigir e
+   documentar o módulo.
+
+
+6. VIGÊNCIA
+
+   Esta licença vale enquanto você cumprir os termos acima. Descumprido qualquer
+   item da seção 2, o direito de uso cessa imediatamente.
+
+
+Dúvidas sobre a licença: https://www.hostcel.com.br
